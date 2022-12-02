@@ -1,0 +1,5 @@
+/Users/guido.schmutz/Documents/GitHub/gschmutz/kafka-to-rdbms/java/meta/target/generated-sources/avro/com/trivadis/kafka/poc/avro/v1/OrderCompletedEvent.java
+/Users/guido.schmutz/Documents/GitHub/gschmutz/kafka-to-rdbms/java/meta/target/generated-sources/avro/com/trivadis/kafka/poc/avro/v1/OrderCompletedEventProtocol.java
+/Users/guido.schmutz/Documents/GitHub/gschmutz/kafka-to-rdbms/java/meta/target/generated-sources/avro/com/trivadis/kafka/poc/avro/v1/OrderLine.java
+/Users/guido.schmutz/Documents/GitHub/gschmutz/kafka-to-rdbms/java/meta/target/generated-sources/avro/com/trivadis/kafka/poc/avro/v1/OrderProtocol.java
+/Users/guido.schmutz/Documents/GitHub/gschmutz/kafka-to-rdbms/java/meta/target/generated-sources/avro/com/trivadis/kafka/poc/avro/v1/Order.java

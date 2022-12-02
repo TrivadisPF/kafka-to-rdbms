@@ -1,0 +1,20 @@
+topic:
+  name: pub.eshop.order-completed.event.v1
+  replication-factor: 3
+  partitions: 8
+
+spring:
+  kafka:
+    bootstrap-servers:
+      - ${DATAPLATFORM_IP}:9092
+      - ${DATAPLATFORM_IP}:9093
+      - ${DATAPLATFORM_IP}:9094
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.LongSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        auto.register.schemas: false
+        use.latest.version: true
+    properties:
+      schema.registry.url: http://${DATAPLATFORM_IP}:8081
+

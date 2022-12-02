@@ -1,0 +1,30 @@
+logging:
+  level:
+    root: INFO
+
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@//dataplatform:1522/XEPDB1
+    driver-class-name: oracle.jdbc.OracleDriver
+    username: ecomm_sales
+    password: abc123!
+
+  kafka:
+    bootstrap-servers:
+      - ${DATAPLATFORM_IP}:9092
+      - ${DATAPLATFORM_IP}:9093
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      auto-offset-reset: earliest
+      properties:
+        auto.register.schemas: false
+        specific.avro.reader: true
+    properties:
+      schema.registry.url: http://${DATAPLATFORM_IP}:8081
+
+topic:
+  name: pub.eshop.order-completed.event.v1
+  replication-factor: 3
+  partitions: 8
+

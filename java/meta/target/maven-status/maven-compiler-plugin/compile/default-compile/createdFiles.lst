@@ -1,0 +1,10 @@
+com/trivadis/kafka/poc/avro/v1/OrderCompletedEventProtocol$Callback.class
+com/trivadis/kafka/poc/avro/v1/OrderProtocol$Callback.class
+com/trivadis/kafka/poc/avro/v1/OrderLine.class
+com/trivadis/kafka/poc/avro/v1/Order$Builder.class
+com/trivadis/kafka/poc/avro/v1/OrderCompletedEvent$Builder.class
+com/trivadis/kafka/poc/avro/v1/OrderCompletedEvent.class
+com/trivadis/kafka/poc/avro/v1/OrderProtocol.class
+com/trivadis/kafka/poc/avro/v1/OrderCompletedEventProtocol.class
+com/trivadis/kafka/poc/avro/v1/Order.class
+com/trivadis/kafka/poc/avro/v1/OrderLine$Builder.class

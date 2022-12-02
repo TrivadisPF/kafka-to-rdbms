@@ -1,0 +1,8 @@
+@namespace("com.trivadis.kafka.poc.avro.v1")
+protocol OrderCompletedEventProtocol {
+	import idl "Order.avdl";
+
+	record OrderCompletedEvent {
+		Order order;
+	}
+}

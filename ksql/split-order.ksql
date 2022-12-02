@@ -1,0 +1,34 @@
+DROP STREAM IF EXISTS priv_dwh_order_s;
+DROP STREAM IF EXISTS priv_dwh_order_line_s;
+DROP STREAM IF EXISTS pub_order_completed_event_s;
+
+CREATE OR REPLACE STREAM pub_order_completed_event_s
+	WITH (KAFKA_TOPIC='pub.eshop.order-completed.event.v1',
+		  VALUE_FORMAT='AVRO',
+		  KEY_FORMAT='KAFKA'
+		  );
+
+
+CREATE OR REPLACE STREAM priv_dwh_order_s 
+	WITH (KAFKA_TOPIC='priv.dwh.order.v1',
+		  VALUE_FORMAT='AVRO',
+		  KEY_FORMAT='KAFKA'
+		  )
+AS
+SELECT order->guid AS id
+, order->customerId AS customer_id
+, order->orderDate AS order_date
+FROM pub_order_completed_event_s;		  
+
+
+CREATE OR REPLACE STREAM priv_dwh_order_line_s 
+	WITH (KAFKA_TOPIC='priv.dwh.order_line.v1',
+		  VALUE_FORMAT='AVRO',
+		  KEY_FORMAT='KAFKA'
+		  )
+AS
+SELECT EXPLODE(order->orderLines)->lineId  AS id
+, order->guid AS order_id
+, EXPLODE(order->orderLines)->productId AS product_id
+, EXPLODE(order->orderLines)->quantity AS quantity
+FROM pub_order_completed_event_s;		

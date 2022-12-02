@@ -1,0 +1,50 @@
+{
+  "type" : "record",
+  "name" : "OrderCompletedEvent",
+  "namespace" : "com.trivadis.kafka.poc.avro.v1",
+  "fields" : [ {
+    "name" : "order",
+    "type" : {
+      "type" : "record",
+      "name" : "Order",
+      "fields" : [ {
+        "name" : "guid",
+        "type" : {
+          "type" : "string",
+          "logicalType" : "uuid"
+        }
+      }, {
+        "name" : "id",
+        "type" : "long"
+      }, {
+        "name" : "orderDate",
+        "type" : {
+          "type" : "long",
+          "logicalType" : "timestamp-millis"
+        }
+      }, {
+        "name" : "customerId",
+        "type" : "long"
+      }, {
+        "name" : "orderLines",
+        "type" : {
+          "type" : "array",
+          "items" : {
+            "type" : "record",
+            "name" : "OrderLine",
+            "fields" : [ {
+              "name" : "lineId",
+              "type" : "long"
+            }, {
+              "name" : "productId",
+              "type" : "long"
+            }, {
+              "name" : "quantity",
+              "type" : "int"
+            } ]
+          }
+        }
+      } ]
+    }
+  } ]
+}
