@@ -12,9 +12,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -34,33 +37,34 @@ public class SpringBootKafkaProducerApplication implements CommandLineRunner {
 		LOG.info("EXECUTING : command line runner");
 
 		if (args.length == 0) {
-			runProducer(1, 10, 0);
+			runProducer(1, 10);
 		} else {
-			runProducer(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Long.parseLong(args[2]));
+			runProducer(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
 		}
 
 	}
 
-	private void runProducer(int sendMessageCount, int waitMsInBetween, long id) throws Exception {
-		Long key = (id > 0) ? id : null;
+	private void runProducer(int sendMessageCount, int waitMsInBetween) throws Exception {
+		UUID uuid = UUID.randomUUID();
+		Random random = new Random();
 
 		for (int index = 0; index < sendMessageCount; index++) {
 			List<OrderLine> orderLines = new ArrayList<>();
-			orderLines.add(OrderLine.newBuilder().setLineId(1).setProductId(12).setQuantity(10).build());
-			orderLines.add(OrderLine.newBuilder().setLineId(2).setProductId(20).setQuantity(5).build());
-			orderLines.add(OrderLine.newBuilder().setLineId(3).setProductId(10).setQuantity(1).build());
+			orderLines.add(OrderLine.newBuilder().setLineId(1).setProductId(random.nextLong(1,2000000)).setQuantity(10).build());
+			orderLines.add(OrderLine.newBuilder().setLineId(2).setProductId(random.nextLong(1,2000000)).setQuantity(5).build());
+			orderLines.add(OrderLine.newBuilder().setLineId(3).setProductId(random.nextLong(1,2000000)).setQuantity(1).build());
 
 			OrderCompletedEvent orderCompletedEvent = OrderCompletedEvent.newBuilder()
 					.setOrder(
 							Order.newBuilder()
-									.setGuid(UUID.randomUUID())
-									.setId(id)
-									.setCustomerId(2)
+									.setId(uuid)
+									.setCustomerId(random.nextLong(1,2000000))
 									.setOrderDate(Instant.now())
-									.setOrderLines(orderLines).build()
+									.setOrderLines(orderLines)
+									.build()
 					).build();
 
-			kafkaEventProducer.produce(index, key, orderCompletedEvent);
+			kafkaEventProducer.produce(uuid.toString(), orderCompletedEvent);
 
 			// Simulate slow processing
 			Thread.sleep(waitMsInBetween);

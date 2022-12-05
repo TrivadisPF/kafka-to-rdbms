@@ -1,0 +1,35 @@
+DROP STREAM IF EXISTS sol3_priv_dwh_order_s;
+DROP STREAM IF EXISTS sol3_priv_dwh_order_line_s;
+DROP STREAM IF EXISTS sol3_pub_order_completed_event_s;
+
+CREATE OR REPLACE STREAM sol3_pub_order_completed_event_s
+	WITH (KAFKA_TOPIC='pub.eshop.order-completed.event.v1',
+		  VALUE_FORMAT='AVRO',
+		  KEY_FORMAT='KAFKA'
+		  );
+
+
+CREATE OR REPLACE STREAM sol3_priv_dwh_order_s 
+	WITH (KAFKA_TOPIC='sol3_priv.dwh.order.v1',
+		  VALUE_FORMAT='AVRO',
+		  KEY_FORMAT='KAFKA'
+		  )
+AS
+SELECT order->id AS id
+, order->customerId AS customer_id
+, order->orderDate AS order_date
+FROM sol3_pub_order_completed_event_s;		  
+
+
+CREATE OR REPLACE STREAM sol3_priv_dwh_order_line_s 
+	WITH (KAFKA_TOPIC='sol3_priv.dwh.order_line.v1',
+		  VALUE_FORMAT='AVRO',
+		  KEY_FORMAT='KAFKA'
+		  )
+AS
+SELECT concat(concat(CAST(EXPLODE(order->orderLines)->lineId AS STRING), ':'), order->id)
+, EXPLODE(order->orderLines)->lineId  AS line_id
+, order->id AS order_id
+, EXPLODE(order->orderLines)->productId AS product_id
+, EXPLODE(order->orderLines)->quantity AS quantity
+FROM sol3_pub_order_completed_event_s;		

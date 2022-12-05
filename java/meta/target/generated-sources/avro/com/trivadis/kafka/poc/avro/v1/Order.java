@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class Order extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -7427629637969430006L;
+  private static final long serialVersionUID = 7131076494183591266L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Order\",\"namespace\":\"com.trivadis.kafka.poc.avro.v1\",\"fields\":[{\"name\":\"guid\",\"type\":{\"type\":\"string\",\"logicalType\":\"uuid\"}},{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"orderDate\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"customerId\",\"type\":\"long\"},{\"name\":\"orderLines\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"OrderLine\",\"fields\":[{\"name\":\"lineId\",\"type\":\"long\"},{\"name\":\"productId\",\"type\":\"long\"},{\"name\":\"quantity\",\"type\":\"int\"}]}}}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Order\",\"namespace\":\"com.trivadis.kafka.poc.avro.v1\",\"fields\":[{\"name\":\"id\",\"type\":{\"type\":\"string\",\"logicalType\":\"uuid\"}},{\"name\":\"orderDate\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"customerId\",\"type\":\"long\"},{\"name\":\"orderLines\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"OrderLine\",\"fields\":[{\"name\":\"lineId\",\"type\":\"long\"},{\"name\":\"productId\",\"type\":\"long\"},{\"name\":\"quantity\",\"type\":\"int\"}]}}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -77,8 +77,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
     return DECODER.decode(b);
   }
 
-  private java.util.UUID guid;
-  private long id;
+  private java.util.UUID id;
   private java.time.Instant orderDate;
   private long customerId;
   private java.util.List<com.trivadis.kafka.poc.avro.v1.OrderLine> orderLines;
@@ -92,14 +91,12 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
 
   /**
    * All-args constructor.
-   * @param guid The new value for guid
    * @param id The new value for id
    * @param orderDate The new value for orderDate
    * @param customerId The new value for customerId
    * @param orderLines The new value for orderLines
    */
-  public Order(java.util.UUID guid, java.lang.Long id, java.time.Instant orderDate, java.lang.Long customerId, java.util.List<com.trivadis.kafka.poc.avro.v1.OrderLine> orderLines) {
-    this.guid = guid;
+  public Order(java.util.UUID id, java.time.Instant orderDate, java.lang.Long customerId, java.util.List<com.trivadis.kafka.poc.avro.v1.OrderLine> orderLines) {
     this.id = id;
     this.orderDate = orderDate.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
     this.customerId = customerId;
@@ -116,11 +113,10 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
   @Override
   public java.lang.Object get(int field$) {
     switch (field$) {
-    case 0: return guid;
-    case 1: return id;
-    case 2: return orderDate;
-    case 3: return customerId;
-    case 4: return orderLines;
+    case 0: return id;
+    case 1: return orderDate;
+    case 2: return customerId;
+    case 3: return orderLines;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -128,7 +124,6 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
   private static final org.apache.avro.Conversion<?>[] conversions =
       new org.apache.avro.Conversion<?>[] {
       new org.apache.avro.Conversions.UUIDConversion(),
-      null,
       new org.apache.avro.data.TimeConversions.TimestampMillisConversion(),
       null,
       null,
@@ -145,37 +140,19 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
   @SuppressWarnings(value="unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-    case 0: guid = (java.util.UUID)value$; break;
-    case 1: id = (java.lang.Long)value$; break;
-    case 2: orderDate = (java.time.Instant)value$; break;
-    case 3: customerId = (java.lang.Long)value$; break;
-    case 4: orderLines = (java.util.List<com.trivadis.kafka.poc.avro.v1.OrderLine>)value$; break;
+    case 0: id = (java.util.UUID)value$; break;
+    case 1: orderDate = (java.time.Instant)value$; break;
+    case 2: customerId = (java.lang.Long)value$; break;
+    case 3: orderLines = (java.util.List<com.trivadis.kafka.poc.avro.v1.OrderLine>)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
-  }
-
-  /**
-   * Gets the value of the 'guid' field.
-   * @return The value of the 'guid' field.
-   */
-  public java.util.UUID getGuid() {
-    return guid;
-  }
-
-
-  /**
-   * Sets the value of the 'guid' field.
-   * @param value the value to set.
-   */
-  public void setGuid(java.util.UUID value) {
-    this.guid = value;
   }
 
   /**
    * Gets the value of the 'id' field.
    * @return The value of the 'id' field.
    */
-  public long getId() {
+  public java.util.UUID getId() {
     return id;
   }
 
@@ -184,7 +161,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
    * Sets the value of the 'id' field.
    * @param value the value to set.
    */
-  public void setId(long value) {
+  public void setId(java.util.UUID value) {
     this.id = value;
   }
 
@@ -280,8 +257,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<Order>
     implements org.apache.avro.data.RecordBuilder<Order> {
 
-    private java.util.UUID guid;
-    private long id;
+    private java.util.UUID id;
     private java.time.Instant orderDate;
     private long customerId;
     private java.util.List<com.trivadis.kafka.poc.avro.v1.OrderLine> orderLines;
@@ -297,25 +273,21 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
      */
     private Builder(com.trivadis.kafka.poc.avro.v1.Order.Builder other) {
       super(other);
-      if (isValidValue(fields()[0], other.guid)) {
-        this.guid = data().deepCopy(fields()[0].schema(), other.guid);
+      if (isValidValue(fields()[0], other.id)) {
+        this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = other.fieldSetFlags()[0];
       }
-      if (isValidValue(fields()[1], other.id)) {
-        this.id = data().deepCopy(fields()[1].schema(), other.id);
+      if (isValidValue(fields()[1], other.orderDate)) {
+        this.orderDate = data().deepCopy(fields()[1].schema(), other.orderDate);
         fieldSetFlags()[1] = other.fieldSetFlags()[1];
       }
-      if (isValidValue(fields()[2], other.orderDate)) {
-        this.orderDate = data().deepCopy(fields()[2].schema(), other.orderDate);
+      if (isValidValue(fields()[2], other.customerId)) {
+        this.customerId = data().deepCopy(fields()[2].schema(), other.customerId);
         fieldSetFlags()[2] = other.fieldSetFlags()[2];
       }
-      if (isValidValue(fields()[3], other.customerId)) {
-        this.customerId = data().deepCopy(fields()[3].schema(), other.customerId);
+      if (isValidValue(fields()[3], other.orderLines)) {
+        this.orderLines = data().deepCopy(fields()[3].schema(), other.orderLines);
         fieldSetFlags()[3] = other.fieldSetFlags()[3];
-      }
-      if (isValidValue(fields()[4], other.orderLines)) {
-        this.orderLines = data().deepCopy(fields()[4].schema(), other.orderLines);
-        fieldSetFlags()[4] = other.fieldSetFlags()[4];
       }
     }
 
@@ -325,73 +297,29 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
      */
     private Builder(com.trivadis.kafka.poc.avro.v1.Order other) {
       super(SCHEMA$, MODEL$);
-      if (isValidValue(fields()[0], other.guid)) {
-        this.guid = data().deepCopy(fields()[0].schema(), other.guid);
+      if (isValidValue(fields()[0], other.id)) {
+        this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.id)) {
-        this.id = data().deepCopy(fields()[1].schema(), other.id);
+      if (isValidValue(fields()[1], other.orderDate)) {
+        this.orderDate = data().deepCopy(fields()[1].schema(), other.orderDate);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.orderDate)) {
-        this.orderDate = data().deepCopy(fields()[2].schema(), other.orderDate);
+      if (isValidValue(fields()[2], other.customerId)) {
+        this.customerId = data().deepCopy(fields()[2].schema(), other.customerId);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.customerId)) {
-        this.customerId = data().deepCopy(fields()[3].schema(), other.customerId);
+      if (isValidValue(fields()[3], other.orderLines)) {
+        this.orderLines = data().deepCopy(fields()[3].schema(), other.orderLines);
         fieldSetFlags()[3] = true;
       }
-      if (isValidValue(fields()[4], other.orderLines)) {
-        this.orderLines = data().deepCopy(fields()[4].schema(), other.orderLines);
-        fieldSetFlags()[4] = true;
-      }
-    }
-
-    /**
-      * Gets the value of the 'guid' field.
-      * @return The value.
-      */
-    public java.util.UUID getGuid() {
-      return guid;
-    }
-
-
-    /**
-      * Sets the value of the 'guid' field.
-      * @param value The value of 'guid'.
-      * @return This builder.
-      */
-    public com.trivadis.kafka.poc.avro.v1.Order.Builder setGuid(java.util.UUID value) {
-      validate(fields()[0], value);
-      this.guid = value;
-      fieldSetFlags()[0] = true;
-      return this;
-    }
-
-    /**
-      * Checks whether the 'guid' field has been set.
-      * @return True if the 'guid' field has been set, false otherwise.
-      */
-    public boolean hasGuid() {
-      return fieldSetFlags()[0];
-    }
-
-
-    /**
-      * Clears the value of the 'guid' field.
-      * @return This builder.
-      */
-    public com.trivadis.kafka.poc.avro.v1.Order.Builder clearGuid() {
-      guid = null;
-      fieldSetFlags()[0] = false;
-      return this;
     }
 
     /**
       * Gets the value of the 'id' field.
       * @return The value.
       */
-    public long getId() {
+    public java.util.UUID getId() {
       return id;
     }
 
@@ -401,10 +329,10 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'id'.
       * @return This builder.
       */
-    public com.trivadis.kafka.poc.avro.v1.Order.Builder setId(long value) {
-      validate(fields()[1], value);
+    public com.trivadis.kafka.poc.avro.v1.Order.Builder setId(java.util.UUID value) {
+      validate(fields()[0], value);
       this.id = value;
-      fieldSetFlags()[1] = true;
+      fieldSetFlags()[0] = true;
       return this;
     }
 
@@ -413,7 +341,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @return True if the 'id' field has been set, false otherwise.
       */
     public boolean hasId() {
-      return fieldSetFlags()[1];
+      return fieldSetFlags()[0];
     }
 
 
@@ -422,7 +350,8 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public com.trivadis.kafka.poc.avro.v1.Order.Builder clearId() {
-      fieldSetFlags()[1] = false;
+      id = null;
+      fieldSetFlags()[0] = false;
       return this;
     }
 
@@ -441,9 +370,9 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public com.trivadis.kafka.poc.avro.v1.Order.Builder setOrderDate(java.time.Instant value) {
-      validate(fields()[2], value);
+      validate(fields()[1], value);
       this.orderDate = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
-      fieldSetFlags()[2] = true;
+      fieldSetFlags()[1] = true;
       return this;
     }
 
@@ -452,7 +381,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @return True if the 'orderDate' field has been set, false otherwise.
       */
     public boolean hasOrderDate() {
-      return fieldSetFlags()[2];
+      return fieldSetFlags()[1];
     }
 
 
@@ -461,7 +390,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public com.trivadis.kafka.poc.avro.v1.Order.Builder clearOrderDate() {
-      fieldSetFlags()[2] = false;
+      fieldSetFlags()[1] = false;
       return this;
     }
 
@@ -480,9 +409,9 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public com.trivadis.kafka.poc.avro.v1.Order.Builder setCustomerId(long value) {
-      validate(fields()[3], value);
+      validate(fields()[2], value);
       this.customerId = value;
-      fieldSetFlags()[3] = true;
+      fieldSetFlags()[2] = true;
       return this;
     }
 
@@ -491,7 +420,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @return True if the 'customerId' field has been set, false otherwise.
       */
     public boolean hasCustomerId() {
-      return fieldSetFlags()[3];
+      return fieldSetFlags()[2];
     }
 
 
@@ -500,7 +429,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public com.trivadis.kafka.poc.avro.v1.Order.Builder clearCustomerId() {
-      fieldSetFlags()[3] = false;
+      fieldSetFlags()[2] = false;
       return this;
     }
 
@@ -519,9 +448,9 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public com.trivadis.kafka.poc.avro.v1.Order.Builder setOrderLines(java.util.List<com.trivadis.kafka.poc.avro.v1.OrderLine> value) {
-      validate(fields()[4], value);
+      validate(fields()[3], value);
       this.orderLines = value;
-      fieldSetFlags()[4] = true;
+      fieldSetFlags()[3] = true;
       return this;
     }
 
@@ -530,7 +459,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       * @return True if the 'orderLines' field has been set, false otherwise.
       */
     public boolean hasOrderLines() {
-      return fieldSetFlags()[4];
+      return fieldSetFlags()[3];
     }
 
 
@@ -540,7 +469,7 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
       */
     public com.trivadis.kafka.poc.avro.v1.Order.Builder clearOrderLines() {
       orderLines = null;
-      fieldSetFlags()[4] = false;
+      fieldSetFlags()[3] = false;
       return this;
     }
 
@@ -549,11 +478,10 @@ public class Order extends org.apache.avro.specific.SpecificRecordBase implement
     public Order build() {
       try {
         Order record = new Order();
-        record.guid = fieldSetFlags()[0] ? this.guid : (java.util.UUID) defaultValue(fields()[0]);
-        record.id = fieldSetFlags()[1] ? this.id : (java.lang.Long) defaultValue(fields()[1]);
-        record.orderDate = fieldSetFlags()[2] ? this.orderDate : (java.time.Instant) defaultValue(fields()[2]);
-        record.customerId = fieldSetFlags()[3] ? this.customerId : (java.lang.Long) defaultValue(fields()[3]);
-        record.orderLines = fieldSetFlags()[4] ? this.orderLines : (java.util.List<com.trivadis.kafka.poc.avro.v1.OrderLine>) defaultValue(fields()[4]);
+        record.id = fieldSetFlags()[0] ? this.id : (java.util.UUID) defaultValue(fields()[0]);
+        record.orderDate = fieldSetFlags()[1] ? this.orderDate : (java.time.Instant) defaultValue(fields()[1]);
+        record.customerId = fieldSetFlags()[2] ? this.customerId : (java.lang.Long) defaultValue(fields()[2]);
+        record.orderLines = fieldSetFlags()[3] ? this.orderLines : (java.util.List<com.trivadis.kafka.poc.avro.v1.OrderLine>) defaultValue(fields()[3]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;

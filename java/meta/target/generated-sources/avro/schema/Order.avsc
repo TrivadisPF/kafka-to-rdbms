@@ -3,14 +3,11 @@
   "name" : "Order",
   "namespace" : "com.trivadis.kafka.poc.avro.v1",
   "fields" : [ {
-    "name" : "guid",
+    "name" : "id",
     "type" : {
       "type" : "string",
       "logicalType" : "uuid"
     }
-  }, {
-    "name" : "id",
-    "type" : "long"
   }, {
     "name" : "orderDate",
     "type" : {

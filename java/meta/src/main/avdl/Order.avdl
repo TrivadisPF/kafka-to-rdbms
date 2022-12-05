@@ -1,8 +1,7 @@
 @namespace("com.trivadis.kafka.poc.avro.v1")
 protocol OrderProtocol {
 	record Order {
-		uuid guid;
-		long id;
+		uuid id;
 		timestamp_ms orderDate;
 		long customerId;
 		array<OrderLine> orderLines;

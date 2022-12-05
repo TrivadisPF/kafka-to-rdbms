@@ -8,14 +8,11 @@
       "type" : "record",
       "name" : "Order",
       "fields" : [ {
-        "name" : "guid",
+        "name" : "id",
         "type" : {
           "type" : "string",
           "logicalType" : "uuid"
         }
-      }, {
-        "name" : "id",
-        "type" : "long"
       }, {
         "name" : "orderDate",
         "type" : {

@@ -19,13 +19,13 @@ public class KafkaEventProducer {
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaEventProducer.class);
 
     @Autowired
-    private KafkaTemplate<Long, OrderCompletedEvent> kafkaTemplate;
+    private KafkaTemplate<String, OrderCompletedEvent> kafkaTemplate;
 
     @Value("${topic.name}")
     String kafkaTopic;
 
-    public void produce(Integer id, Long key, OrderCompletedEvent orderCompletedEvent) {
-        SendResult<Long, OrderCompletedEvent> result = null;
+    public void produce(String key, OrderCompletedEvent orderCompletedEvent) {
+        SendResult<String, OrderCompletedEvent> result = null;
         try {
             result = kafkaTemplate.send(kafkaTopic, key, orderCompletedEvent).get(10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
