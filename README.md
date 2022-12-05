@@ -90,9 +90,9 @@ If you don't like to work with the CLI, you can also create the Kafka topics usi
 
 ## Implementation
 
-### Solution 3 - ksqlDB amd Kafka Connect JDBC Connector to Oracle tables
+### Solution 3 - ksqlDB and Kafka Connect JDBC Connector to Oracle tables
 
-![](./images/solution3.png)
+![](./images/solution-3.png)
 
 ```sql
 DROP STREAM IF EXISTS sol3_priv_dwh_order_s;
@@ -168,9 +168,14 @@ curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
 }'
 ```
 
+### Solution 4 - Kafka Connect JDBC Connector with Flatten to Oracle tables
+
+![](./images/solution-4.png)
+
+
 ### Solution 6 - Kafka Connect to Oracle JSON View with PL/SQL Instead-of-Trigger to Oracle Tabellen
 
-![](./images/solution6.png)
+![](./images/solution-6.png)
 
 
 ```sql
