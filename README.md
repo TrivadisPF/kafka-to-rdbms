@@ -176,8 +176,11 @@ curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
 ```sql
 DROP TABLE sol6_order_aggr_t;
 
-CREATE TABLE sol6_order_aggr_t (ID VARCHAR2(100) PRIMARY KEY
-									, JSON_STRING CLOB);
+CREATE TABLE sol6_order_aggr_t (id VARCHAR2(100) PRIMARY KEY
+									, json_string CLOB
+									, offset NUMBER(10)
+									, timestamp TIMESTAMP
+									, topic VARCHAR2(20));
 ```
 
 ```sql
@@ -198,23 +201,24 @@ ALTER TABLE sol6_order_line_t
 	  REFERENCES sol6_order_t (id);
 ```
 
-```
+```sql
 CREATE OR REPLACE VIEW sol6_order_aggr_v 
 AS 
 SELECT id
-,       json_string
-, 		TO_NUMBER(NULL) offset
-, 		TO_DATE(NULL) timestamp 
-,	   TO_CHAR(NULL) topic
+,      json_string
+, 		offset
+, 		timestamp 
+,	   topic
 FROM sol6_order_aggr_t;
 ```
 
-```
+```sql
 CREATE OR REPLACE TRIGGER sol6_order_aggr_iot
 INSTEAD OF INSERT OR UPDATE ON sol6_order_aggr_v
 DECLARE
 BEGIN
-   INSERT INTO sol6_order_aggr_t VALUES(:NEW.id, :NEW.json_string);
+   INSERT INTO sol6_order_aggr_t (id, json_string, offset, timestamp, topic)
+   VALUES(:NEW.id, :NEW.json_string, :NEW.offset, :NEW.timestamp, :NEW.topic);
    
    INSERT INTO sol6_order_t (id, customer_id, order_date)
    SELECT id, customer_id, TO_TIMESTAMP(order_date, 'YYYY-MM-DD"T"HH24:MI:SS.FF"Z"') 
@@ -225,7 +229,7 @@ BEGIN
             order_date VARCHAR2 PATH orderDate));
 
    INSERT INTO sol6_order_line_t (id, order_id, product_id, quantity)
-   SELECT id, order_id, product_id, quantity
+   SELECT order_id || ':' || id, order_id, product_id, quantity
    FROM json_table (:NEW.json_string FORMAT JSON, '$.order'
         COLUMNS (
             order_id VARCHAR2 PATH id,
@@ -235,7 +239,8 @@ BEGIN
                 product_id NUMBER PATH productId,
                 quantity NUMBER PATH quantity)));
 
-END;
+END sol6_order_aggr_iot;
+
 ```
 
 
