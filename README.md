@@ -149,7 +149,6 @@ curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
     "auto.create":"true",
     "auto.evolve":"false",
     "insert.mode": "upsert",
-    "insert.mode.databaselevel": true,
     "pk.mode": "record_value",
     "pk.fields": "ID",
     "key.converter":"org.apache.kafka.connect.storage.StringConverter",
@@ -172,10 +171,65 @@ curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
 
 ![](./images/solution-4.png)
 
+```bash
+curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
+     -H "Content-Type: application/json" \
+     -d $'{
+  "name": "sol4-jdbc-sink-connector",
+  "config": {
+    "connector.class": "no.norsktipping.kafka.connect.jdbc.connector.JdbcSinkConnector_Flatten",
+    "flatten": "true",
+    "flatten.coordinates": "false",
+    "flatten.delimiter": "_",
+    "flatten.uppercase" : "true",
+    "tasks.max": "1",
+    "topics.regex": "pub.eshop.order-completed.event.v1",
+    "connection.url": "jdbc:oracle:thin:@//oracledb-xe:1521/XEPDB1",
+    "connection.user": "ecomm_sales",
+    "connection.password": "abc123!",
+    "connection.ds.pool.size": 5,
+    "quote.sql.identifiers":"never",
+    "auto.create":"true",
+    "auto.evolve":"false",
+    "insert.mode": "insert",
+    "pk.mode": "flatten",
+    "flatten.pk_propagate_value_fields":"ordercompletedevent.order.id",
+    "pk.fields": "ordercompletedevent.order.id, ordercompletedevent.order.orderlines",
+    "key.converter":"org.apache.kafka.connect.storage.StringConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter":"io.confluent.connect.avro.AvroConverter",
+    "value.converter.schema.registry.url": "http://schema-registry-1:8081",
+    "value.converter.schemas.enable": "false",
+    "transforms": "route,topicCase",
+    "transforms.route.regex": "pub.eshop.(.*).event.v1",
+    "transforms.route.replacement": "SOL4",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.topicCase.type": "com.github.jcustenborder.kafka.connect.transform.common.ChangeTopicCase",
+    "transforms.topicCase.from": "LOWER_UNDERSCORE",
+    "transforms.topicCase.to": "UPPER_UNDERSCORE"               
+    }
+}'
+```
+DROP TABLE SOL4_ORDERCOMPLETEDEVENT;
+
+CREATE TABLE SOL4_ORDERCOMPLETEDEVENT (
+ORDERCOMPLETEDEVENT_ORDER_ID VARCHAR2(50) NOT NULL,
+ORDERDATE TIMESTAMP NOT NULL,
+CUSTOMERID NUMBER(19,0) NOT NULL,
+PRIMARY KEY(ORDERCOMPLETEDEVENT_ORDER_ID));
+
+CREATE TABLE SOL4_ORDERCOMPLETEDEVENT_ORDER_ORDERLINES (
+LINEID NUMBER(19,0) NOT NULL,
+PRODUCTID NUMBER(19,0) NOT NULL,
+QUANTITY NUMBER(10,0) NOT NULL,
+id VARCHAR2(50) NOT NULL,
+PRIMARY KEY(id));
 
 ### Solution 6 - Kafka Connect to Oracle JSON View with PL/SQL Instead-of-Trigger to Oracle Tabellen
 
 ![](./images/solution-6.png)
+
+Using the following Single Message Transform: <https://www.confluent.io/hub/an0r0c/kafka-connect-transform-record2jsonstring>
 
 
 ```sql
