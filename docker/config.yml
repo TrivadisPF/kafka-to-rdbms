@@ -96,7 +96,7 @@
       #
       KAFKA_CONNECT_enable: true
       KAFKA_CONNECT_nodes: 1
-      KAFKA_CONNECT_connectors: 'norsktipping/kafka-connect-jdbc_flatten:5.5.2,confluentinc/kafka-connect-jdbc:10.6.0,confluent-hub install jcustenborder/kafka-connect-transform-common:0.1.0.58,an0r0c/kafka-connect-transform-record2jsonstring:1.2'
+      KAFKA_CONNECT_connectors: 'norsktipping/kafka-connect-jdbc_flatten:5.5.2,confluentinc/kafka-connect-jdbc:10.6.0,jcustenborder/kafka-connect-transform-common:0.1.0.58,an0r0c/kafka-connect-transform-record2jsonstring:1.2'
       KAFKA_CONNECT_config_providers: 'file'
       KAFKA_CONNECT_config_providers_classes: 'org.apache.kafka.common.config.provider.FileConfigProvider'
       KAFKA_CONNECT_map_settings_file: false
