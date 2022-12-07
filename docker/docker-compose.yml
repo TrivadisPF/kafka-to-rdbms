@@ -203,7 +203,7 @@ services:
       - |
         echo "Installing Connectors"
         mkdir -p /etc/kafka-connect/cflthub-plugins
-        for i in $$(echo "norsktipping/kafka-connect-jdbc_flatten:5.5.2,confluentinc/kafka-connect-jdbc:10.6.0,confluent-hub install jcustenborder/kafka-connect-transform-common:0.1.0.58,an0r0c/kafka-connect-transform-record2jsonstring:1.2" | sed "s/,/ /g")
+        for i in $$(echo "norsktipping/kafka-connect-jdbc_flatten:5.5.2,confluentinc/kafka-connect-jdbc:10.6.0,jcustenborder/kafka-connect-transform-common:0.1.0.58,an0r0c/kafka-connect-transform-record2jsonstring:1.2" | sed "s/,/ /g")
         do
           confluent-hub install --no-prompt --component-dir /etc/kafka-connect/cflthub-plugins --verbose "$$i"
         done
