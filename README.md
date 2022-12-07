@@ -210,6 +210,9 @@ curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
     }
 }'
 ```
+
+
+```sql
 DROP TABLE SOL4_ORDERCOMPLETEDEVENT;
 
 CREATE TABLE SOL4_ORDERCOMPLETEDEVENT (
@@ -224,6 +227,7 @@ PRODUCTID NUMBER(19,0) NOT NULL,
 QUANTITY NUMBER(10,0) NOT NULL,
 id VARCHAR2(50) NOT NULL,
 PRIMARY KEY(id));
+```
 
 ### Solution 6 - Kafka Connect to Oracle JSON View with PL/SQL Instead-of-Trigger to Oracle Tabellen
 
