@@ -239,11 +239,12 @@ Using the following Single Message Transform: <https://www.confluent.io/hub/an0r
 ```sql
 DROP TABLE sol6_order_aggr_t;
 
-CREATE TABLE sol6_order_aggr_t (id VARCHAR2(100) PRIMARY KEY
-									, json_string CLOB
+CREATE TABLE sol6_order_aggr_t (topic VARCHAR2(100)
+                              , partition NUMBER(10)
 									, offset NUMBER(10)
-									, timestamp TIMESTAMP
-									, topic VARCHAR2(20));
+									, json_string CLOB
+									, timestamp TIMESTAMP);
+ALTER TABLE sol6_order_aggr_t ADD CONSTRAINT pk_sol6_order_aggr_t PRIMARY KEY (topic, partition, offset); 						
 ```
 
 ```sql
@@ -267,11 +268,11 @@ ALTER TABLE sol6_order_line_t
 ```sql
 CREATE OR REPLACE VIEW sol6_order_aggr_v 
 AS 
-SELECT id
+SELECT topic
+,      partition
+,      offset
 ,      json_string
-, 		offset
-, 		timestamp 
-,	   topic
+,      timestamp 
 FROM sol6_order_aggr_t;
 ```
 
@@ -280,8 +281,8 @@ CREATE OR REPLACE TRIGGER sol6_order_aggr_iot
 INSTEAD OF INSERT OR UPDATE ON sol6_order_aggr_v
 DECLARE
 BEGIN
-   INSERT INTO sol6_order_aggr_t (id, json_string, offset, timestamp, topic)
-   VALUES(:NEW.id, :NEW.json_string, :NEW.offset, :NEW.timestamp, :NEW.topic);
+   INSERT INTO sol6_order_aggr_t (topic, partition, offset, json_string, timestamp)
+   VALUES(:NEW.topic, :NEW.partition, :NEW.offset, :NEW.json_string, :NEW.timestamp);
    
    INSERT INTO sol6_order_t (id, customer_id, order_date)
    SELECT id, customer_id, TO_TIMESTAMP(order_date, 'YYYY-MM-DD"T"HH24:MI:SS.FF"Z"') 
@@ -303,7 +304,7 @@ BEGIN
                 quantity NUMBER PATH quantity)));
 
 END sol6_order_aggr_iot;
-
+/
 ```
 
 
@@ -325,8 +326,10 @@ curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
     "quote.sql.identifiers":"never",
     "auto.create":"false",
     "auto.evolve":"false",
-    "pk.mode": "record_key",
-    "pk.fields":"id",
+    "insert.mode": "insert",
+    "pk.mode": "kafka",
+    "pk.fields":"topic,partition,offset",
+    "db.timezone": "UTC",
     "key.converter":"org.apache.kafka.connect.storage.StringConverter",
     "key.converter.schemas.enable": "false",
     "value.converter":"io.confluent.connect.avro.AvroConverter",
@@ -339,9 +342,83 @@ curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
     "transforms.ToJson.json.writer.handle.logical.types": "true",
     "transforms.ToJson.json.writer.datetime.logical.types.as": "STRING",
     "transforms.InsertField.type": "org.apache.kafka.connect.transforms.InsertField$Value",
-    "transforms.InsertField.offset.field": "offset",
-    "transforms.InsertField.timestamp.field": "timestamp",
-    "transforms.InsertField.topic.field": "topic"
+    "transforms.InsertField.timestamp.field": "timestamp"
     }
 }'
+```
+
+### Solution 7 - Kafka Connect to Oracle Table with Batch Script to write to tables
+
+
+![](./images/solution-7.png)
+
+
+
+```bash
+curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
+     -H "Content-Type: application/json" \
+     -d $'{
+  "name": "sol7-jdbc-sink-connector",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "tasks.max": "1",
+    "topics.regex": "pub.eshop.order-completed.event.v1",
+    "connection.url": "jdbc:oracle:thin:@//oracledb-xe:1521/XEPDB1",
+    "connection.user": "ecomm_sales",
+    "connection.password": "abc123!",
+    "connection.ds.pool.size": 5,
+    "table.name.format": "SOL7_ORDER_AGGR_T",
+    "table.types": "TABLE",
+    "quote.sql.identifiers":"never",
+    "auto.create":"false",
+    "auto.evolve":"false",
+    "insert.mode": "upsert",
+    "pk.mode": "kafka",
+    "pk.fields":"topic,partition,offset",
+    "db.timezone": "UTC",
+    "key.converter":"org.apache.kafka.connect.storage.StringConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter":"io.confluent.connect.avro.AvroConverter",
+    "value.converter.schema.registry.url": "http://schema-registry-1:8081",
+    "value.converter.schemas.enable": "false",
+    "transforms": "ToJson,InsertField",
+    "transforms.ToJson.json.string.field.name": "json_string",
+    "transforms.ToJson.json.writer.output.mode": "RELAXED",
+    "transforms.ToJson.type": "com.github.cedelsb.kafka.connect.smt.Record2JsonStringConverter$Value",  
+    "transforms.ToJson.json.writer.handle.logical.types": "true",
+    "transforms.ToJson.json.writer.datetime.logical.types.as": "STRING",
+    "transforms.InsertField.type": "org.apache.kafka.connect.transforms.InsertField$Value",
+    "transforms.InsertField.timestamp.field": "timestamp"
+    }
+}'
+```
+
+```sql
+DROP TABLE sol7_order_aggr_t;
+
+CREATE TABLE sol7_order_aggr_t (topic VARCHAR2(100)
+                              , partition NUMBER(10)
+									, offset NUMBER(10)
+									, json_string CLOB
+									, timestamp TIMESTAMP
+									, created_date TIMESTAMP);
+ALTER TABLE sol7_order_aggr_t ADD CONSTRAINT pk_sol7_order_aggr_t PRIMARY KEY (topic, partition, offset); 						
+```
+
+```sql
+DROP TABLE sol7_order_line_t;
+DROP TABLE sol7_order_t;
+
+CREATE TABLE sol7_order_t (id VARCHAR2(100) PRIMARY KEY
+							, customer_id NUMBER(32)
+							, order_date TIMESTAMP);
+
+CREATE TABLE sol7_order_line_t (id VARCHAR2(100) PRIMARY KEY
+									, order_id VARCHAR2(100)
+									, product_id NUMBER(32)
+									, quantity NUMBER(3));
+									
+ALTER TABLE sol7_order_line_t 
+	ADD CONSTRAINT sol7_fk_ordl_ord FOREIGN KEY (order_id)
+	  REFERENCES sol7_order_t (id);
 ```

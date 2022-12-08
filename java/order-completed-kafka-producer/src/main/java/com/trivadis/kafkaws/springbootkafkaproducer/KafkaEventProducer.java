@@ -26,8 +26,9 @@ public class KafkaEventProducer {
 
     public void produce(String key, OrderCompletedEvent orderCompletedEvent) {
         SendResult<String, OrderCompletedEvent> result = null;
+        Instant timestamp = orderCompletedEvent.getOrder().getOrderDate();
         try {
-            result = kafkaTemplate.send(kafkaTopic, key, orderCompletedEvent).get(10, TimeUnit.SECONDS);
+            result = kafkaTemplate.send(kafkaTopic, null, timestamp.toEpochMilli(), key, orderCompletedEvent).get(10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

@@ -20,23 +20,23 @@ curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
     "quote.sql.identifiers":"never",
     "auto.create":"false",
     "auto.evolve":"false",
-    "pk.mode": "record_key",
-    "pk.fields":"id",
+    "insert.mode": "insert",
+    "pk.mode": "kafka",
+    "pk.fields":"topic,partition,offset",
+    "db.timezone": "UTC",
     "key.converter":"org.apache.kafka.connect.storage.StringConverter",
     "key.converter.schemas.enable": "false",
     "value.converter":"io.confluent.connect.avro.AvroConverter",
     "value.converter.schema.registry.url": "http://schema-registry-1:8081",
     "value.converter.schemas.enable": "false",
-    "transforms": "ToJson,InsertField",
+    "transforms": "ExtractNestedField,ToJson,InsertField",
     "transforms.ToJson.json.string.field.name": "json_string",
     "transforms.ToJson.json.writer.output.mode": "RELAXED",
     "transforms.ToJson.type": "com.github.cedelsb.kafka.connect.smt.Record2JsonStringConverter$Value",  
     "transforms.ToJson.json.writer.handle.logical.types": "true",
     "transforms.ToJson.json.writer.datetime.logical.types.as": "STRING",
     "transforms.InsertField.type": "org.apache.kafka.connect.transforms.InsertField$Value",
-    "transforms.InsertField.offset.field": "offset",
-    "transforms.InsertField.timestamp.field": "timestamp",
-    "transforms.InsertField.topic.field": "topicName"
+    "transforms.InsertField.timestamp.field": "timestamp"
     }
 }'
 
