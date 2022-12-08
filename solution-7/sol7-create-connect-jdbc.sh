@@ -38,7 +38,7 @@ curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
     "transforms.InsertField.type": "org.apache.kafka.connect.transforms.InsertField$Value",
     "transforms.InsertField.timestamp.field": "timestamp",
     "transforms.AddTimestamp.type" : "com.github.jcustenborder.kafka.connect.transform.common.TimestampNowField$Value",
-    "transforms.AddTimestamp.fields" : "created_date"    
+    "transforms.AddTimestamp.fields" : "modified_date"    
     }
 }'
 

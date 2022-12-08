@@ -381,14 +381,16 @@ curl -X "POST" "$DOCKER_HOST_IP:8083/connectors" \
     "value.converter":"io.confluent.connect.avro.AvroConverter",
     "value.converter.schema.registry.url": "http://schema-registry-1:8081",
     "value.converter.schemas.enable": "false",
-    "transforms": "ToJson,InsertField",
+    "transforms": "ToJson,InsertField,AddTimestamp",
     "transforms.ToJson.json.string.field.name": "json_string",
     "transforms.ToJson.json.writer.output.mode": "RELAXED",
     "transforms.ToJson.type": "com.github.cedelsb.kafka.connect.smt.Record2JsonStringConverter$Value",  
     "transforms.ToJson.json.writer.handle.logical.types": "true",
     "transforms.ToJson.json.writer.datetime.logical.types.as": "STRING",
     "transforms.InsertField.type": "org.apache.kafka.connect.transforms.InsertField$Value",
-    "transforms.InsertField.timestamp.field": "timestamp"
+    "transforms.InsertField.timestamp.field": "timestamp",
+    "transforms.AddTimestamp.type" : "com.github.jcustenborder.kafka.connect.transform.common.TimestampNowField$Value",
+    "transforms.AddTimestamp.fields" : "modified_date"    
     }
 }'
 ```
@@ -401,7 +403,7 @@ CREATE TABLE sol7_order_aggr_t (topic VARCHAR2(100)
 									, offset NUMBER(10)
 									, json_string CLOB
 									, timestamp TIMESTAMP
-									, created_date TIMESTAMP);
+									, modified_date TIMESTAMP);
 ALTER TABLE sol7_order_aggr_t ADD CONSTRAINT pk_sol7_order_aggr_t PRIMARY KEY (topic, partition, offset); 						
 ```
 

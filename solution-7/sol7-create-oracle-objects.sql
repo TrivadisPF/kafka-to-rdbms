@@ -5,7 +5,7 @@ CREATE TABLE sol7_order_aggr_t (topic VARCHAR2(100)
 									, offset NUMBER(10)
 									, json_string CLOB
 									, timestamp TIMESTAMP
-									, created_date TIMESTAMP);
+									, modified_date TIMESTAMP);
 ALTER TABLE sol7_order_aggr_t ADD CONSTRAINT pk_sol7_order_aggr_t PRIMARY KEY (topic, partition, offset); 						
 
 
